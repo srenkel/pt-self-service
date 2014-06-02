@@ -9,7 +9,6 @@ import java.util.List;
 import org.apache.wicket.spring.injection.annot.SpringBean;
 import org.wicketstuff.rest.annotations.MethodMapping;
 import org.wicketstuff.rest.annotations.parameters.RequestBody;
-import org.wicketstuff.rest.contenthandling.mimetypes.RestMimeTypes;
 import org.wicketstuff.rest.resource.gson.GsonRestResource;
 import org.wicketstuff.rest.utils.http.HttpMethod;
 
@@ -30,7 +29,7 @@ public class ServiceManager extends GsonRestResource implements IServiceManager 
 
 	private static final long serialVersionUID = 1L;
 	
-	private PuppetDataManager puppetDataManager = new PuppetDataManager();
+	private IPuppetDataManager puppetDataManager = new PuppetDataManager();
 	
 	@Override
 	@MethodMapping(value = "/applications", httpMethod = HttpMethod.GET)
