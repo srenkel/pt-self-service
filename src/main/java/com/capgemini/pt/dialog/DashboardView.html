@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head></head>
+<body>
+	<wicket:extend>
+		<h1 wicket:id="viewTitle">Title</h1>
+		<div class="tableDiv third left margin">
+			<table>
+				<tr>
+					<td>OID</td>
+					<td>Status</td>
+					<td>Projectname</td>
+				</tr>
+				<tr wicket:id="listview">
+					<td><span wicket:id="uid"></span></td>
+					<td><span wicket:id="status"></span></td>
+					<td><span wicket:id="name"></span></td>
+				</tr>
+			</table>
+		</div>
+		<div class="mainView twoThird right margin">
+			<h1>PROJECT NAME</h1>
+			<div class="margin">
+				<h2 class="center">FEEDBACK POPUP</h2>
+			</div>
+			<div class="margin border">
+				<h2>Project Details</h2>
+			</div>
+			<div class="margin border">
+				<h2 class="clear">FILES</h2>
+				<div class="left margin border">WAR FILES</div>
+				<div class="right margin border">SQL FILES</div>
+				<div class="clear"></div>
+			</div>
+			<div class="margin border">
+				<h2>INSTALL HISTORY</h2>
+			</div>
+			<div class="margin border">
+				<h2 class="clear">LIST OF SERVERS</h2>
+				<div class="left margin border">APPSRVS</div>
+				<div class="right margin border">DBSRVS</div>
+				<div class="clear"></div>
+			</div>
+			<div class="margin border">
+				<h2>EXECUTION LOG</h2>
+			</div>
+		</div>
+
+	</wicket:extend>
+</body>
+</html>

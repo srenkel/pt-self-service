@@ -8,6 +8,8 @@ hs_err_pid*
 /build/
 /bin/
 target/
+WebContent/
+bin
  
 # OS Files #
 .DS_Store

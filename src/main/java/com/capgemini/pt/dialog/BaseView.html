@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:wicket="http://wicket.apache.org">
+<head>
+<meta charset="utf-8" />
+<title wicket:id="pageTitle">Deployment Manager</title>
+<link rel="shortcut icon" href="resources/favicon.ico"
+	type="image/x-icon" />
+<link
+	href='http://fonts.googleapis.com/css?family=Yanone+Kaffeesatz:regular,bold'
+	rel='stylesheet' type='text/css' />
+<link rel="stylesheet" href="css/style.css" type="text/css" media="screen"
+	title="Stylesheet" />
+</head>
+<body>
+	<div id="header">
+		<div id="headerContent">
+			<div id="logo">
+				<a href="/"> <img src="resources/logo-rad.png" class="logoImage"></img>
+				</a>
+			</div>
+			<div id="menu">
+				<a href="#" wicket:id="dashboardLink"><wicket:message
+						key="menu.pagelink.dashboard">Dashboard</wicket:message></a>
+						<a href="#" wicket:id="newProjectLink"><wicket:message
+						key="menu.pagelink.deploy">Deploy</wicket:message></a>
+						
+			</div>
+			<div id="static">
+<!-- 				<form wicket:id="localeForm"> -->
+<!-- 					<div id="locale"> -->
+<!-- 						<select wicket:id="localeSelector"></select> -->
+<!-- 					</div> -->
+<!-- 					<div id="links"> -->
+<!-- 						<div wicket:id="login"></div> -->
+<!-- 					</div> -->
+<!-- 				</form> -->
+			</div>
+		</div>
+		<div id="menuBackground"></div>
+	</div>
+	<div id="body">
+		<div class="error" wicket:id="feedback"></div>
+		<wicket:child />
+	</div>
+	<div id="footer">
+		<span wicket:id="footer"></span>
+	</div>
+</body>
+</html>
