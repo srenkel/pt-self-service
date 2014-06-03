@@ -12,6 +12,7 @@ import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.apache.wicket.request.resource.IResource;
 import org.apache.wicket.request.resource.ResourceReference;
+import org.wicketstuff.rest.utils.mounting.PackageScanner;
 
 import com.capgemini.pt.dialog.DashboardView;
 import com.capgemini.pt.dialog.DeployView;
@@ -76,19 +77,19 @@ public class SelfServiceApplication extends WebApplication {
 		// getExceptionSettings().setUnexpectedExceptionDisplay(IExceptionSettings.SHOW_INTERNAL_ERROR_PAGE);
 
 		// REST
-
-		mountResource("/rest",
-				new ResourceReference("restReference") {
-			
-					private static final long serialVersionUID = 1L;
-					
-					private ServiceManager resource = new ServiceManager();
-
-					@Override
-					public IResource getResource() {
-						return resource;
-					}
-				});
+		PackageScanner.scanPackage("com.capgemini.pt");
+		// mountResource("/rest",
+		// new ResourceReference("restReference") {
+		//
+		// private static final long serialVersionUID = 1L;
+		//
+		// private ServiceManager resource = new ServiceManager();
+		//
+		// @Override
+		// public IResource getResource() {
+		// return resource;
+		// }
+		// });
 
 		// add your configuration here
 		initPageMounts();

@@ -12,6 +12,6 @@ public interface IPuppetDataManager {
 
 	public List<Server> getServerForEnvironment(Environment environment);
 
-	public List<DatabaseSchema> getSchemasForServer(Server server);
+	public List<DatabaseSchema> getSchemasForEnvironment(Environment environment);
 
 }

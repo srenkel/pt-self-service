@@ -1,7 +1,9 @@
 package com.capgemini.pt.puppet.entity;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.Date;
 import java.util.List;
 
@@ -11,7 +13,9 @@ import java.util.List;
  */
 @Entity
 @Table(name = "nodes", schema = "dashboard_production")
-@NamedQuery(name = "Node.findAll", query = "SELECT n FROM Node n")
+@NamedQueries({
+		@NamedQuery(name = "Node.findAll", query = "SELECT n FROM Node n"),
+		@NamedQuery(name = "Node.findByName", query = "SELECT n FROM Node n WHERE n.name = :name") })
 public class Node implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -52,6 +56,11 @@ public class Node implements Serializable {
 	@ManyToMany
 	@JoinTable(schema = "dashboard_production", name = "node_group_memberships", joinColumns = { @JoinColumn(name = "node_id") }, inverseJoinColumns = { @JoinColumn(name = "node_group_id") })
 	private List<NodeGroup> nodeGroups;
+
+	// bi-directional many-to-many association to NodeClass
+	@ManyToMany
+	@JoinTable(schema = "dashboard_production", name = "node_class_memberships", joinColumns = { @JoinColumn(name = "node_id") }, inverseJoinColumns = { @JoinColumn(name = "node_class_id") })
+	private List<NodeClass> nodeClasses;
 
 	public Node() {
 	}
@@ -142,6 +151,21 @@ public class Node implements Serializable {
 
 	public void setNodeGroups(List<NodeGroup> nodeGroups) {
 		this.nodeGroups = nodeGroups;
+	}
+
+	/**
+	 * @return the nodeClasses
+	 */
+	public List<NodeClass> getNodeClasses() {
+		return nodeClasses;
+	}
+
+	/**
+	 * @param nodeClasses
+	 *            the nodeClasses to set
+	 */
+	public void setNodeClasses(List<NodeClass> nodeClasses) {
+		this.nodeClasses = nodeClasses;
 	}
 
 }

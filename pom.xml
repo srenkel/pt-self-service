@@ -17,12 +17,16 @@
 	<artifactId>self-service</artifactId>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
+
 	<name>self-service</name>
+
 	<description></description>
+
 	<organization>
 		<name>Capgemini Deutschland GmbH</name>
 		<url>http://www.capgemini.de</url>
 	</organization>
+
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -30,13 +34,17 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+
 	<properties>
+		<aetherVersion>1.0.0.v20140518</aetherVersion>
+		<mavenVersion>3.1.0</mavenVersion>
 		<wicket.version>6.15.0</wicket.version>
 		<jetty.version>7.6.13.v20130916</jetty.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<!-- allowed values: R7, 1.0, 1.5, 2.0 or none -->
 		<wtp.version>none</wtp.version>
 	</properties>
+
 	<dependencies>
 		<!-- WICKET DEPENDENCIES -->
 		<dependency>
@@ -52,7 +60,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.4</version>
+			<version>1.5.8</version>
 		</dependency>
 		<dependency>
 			<groupId>log4j</groupId>
@@ -83,33 +91,33 @@
 			<version>6.15.0</version>
 		</dependency>
 
-		<!-- Spring framework -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-core</artifactId>
-			<version>4.0.3.RELEASE</version>
-		</dependency>
+ 		<!-- Spring framework -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework</groupId> -->
+<!-- 			<artifactId>spring-core</artifactId> -->
+<!-- 			<version>4.0.3.RELEASE</version> -->
+<!-- 		</dependency> -->
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-			<version>4.0.3.RELEASE</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework</groupId> -->
+<!-- 			<artifactId>spring-context</artifactId> -->
+<!-- 			<version>4.0.3.RELEASE</version> -->
+<!-- 		</dependency> -->
 
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-web</artifactId>
-			<version>4.0.3.RELEASE</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.springframework</groupId> -->
+<!-- 			<artifactId>spring-web</artifactId> -->
+<!-- 			<version>4.0.3.RELEASE</version> -->
+<!-- 		</dependency> -->
 
- 		<!-- REST ANNOTATIONS -->
+		<!-- REST ANNOTATIONS -->
 
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-restannotations</artifactId>
 			<version>6.15.0</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.wicketstuff</groupId>
 			<artifactId>wicketstuff-restannotations-json</artifactId>
@@ -130,8 +138,51 @@
 			<version>5.1.0.Final</version>
 		</dependency>
 
+		<!-- AETHER -->
+
+		<dependency>
+			<groupId>org.eclipse.aether</groupId>
+			<artifactId>aether-api</artifactId>
+			<version>${aetherVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.aether</groupId>
+			<artifactId>aether-spi</artifactId>
+			<version>${aetherVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.aether</groupId>
+			<artifactId>aether-util</artifactId>
+			<version>${aetherVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.aether</groupId>
+			<artifactId>aether-impl</artifactId>
+			<version>${aetherVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.aether</groupId>
+			<artifactId>aether-connector-basic</artifactId>
+			<version>${aetherVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.aether</groupId>
+			<artifactId>aether-transport-file</artifactId>
+			<version>${aetherVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.aether</groupId>
+			<artifactId>aether-transport-http</artifactId>
+			<version>${aetherVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.maven</groupId>
+			<artifactId>maven-aether-provider</artifactId>
+			<version>${mavenVersion}</version>
+		</dependency>
 
 	</dependencies>
+
 	<build>
 		<finalName>selfservice</finalName>
 		<resources>

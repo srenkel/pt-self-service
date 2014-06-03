@@ -9,8 +9,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -18,13 +16,13 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 /**
- * The persistent class for the node_groups database table.
+ * The persistent class for the node_classes database table.
  * 
  */
 @Entity
-@Table(name = "node_groups", schema = "dashboard_production")
-@NamedQuery(name = "NodeGroup.findAll", query = "SELECT n FROM NodeGroup n")
-public class NodeGroup implements Serializable {
+@Table(name = "node_classes", schema = "dashboard_production")
+@NamedQuery(name = "NodeClass.findAll", query = "SELECT n FROM NodeClass n")
+public class NodeClass implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -42,20 +40,14 @@ public class NodeGroup implements Serializable {
 	private Date updatedAt;
 
 	// bi-directional many-to-many association to Node
-	@ManyToMany(mappedBy = "nodeGroups")
+	@ManyToMany(mappedBy = "nodeClasses")
 	private List<Node> nodes;
 
 	// bi-directional many-to-many association to NodeGroup
-	@ManyToMany
-	@JoinTable(name = "node_group_edges", joinColumns = { @JoinColumn(name = "from_id") }, inverseJoinColumns = { @JoinColumn(name = "to_id") })
+	@ManyToMany(mappedBy = "nodeClasses")
 	private List<NodeGroup> nodeGroups;
 
-	// bi-directional many-to-many association to NodeClass
-	@ManyToMany
-	@JoinTable(name = "node_group_class_memberships", joinColumns = { @JoinColumn(name = "node_group_id") }, inverseJoinColumns = { @JoinColumn(name = "node_class_id") })
-	private List<NodeClass> nodeClasses;
-
-	public NodeGroup() {
+	public NodeClass() {
 	}
 
 	public int getId() {
@@ -98,34 +90,12 @@ public class NodeGroup implements Serializable {
 		this.nodes = nodes;
 	}
 
-	/**
-	 * @return the nodeGroups
-	 */
 	public List<NodeGroup> getNodeGroups() {
-		return nodeGroups;
+		return this.nodeGroups;
 	}
 
-	/**
-	 * @param nodeGroups the nodeGroups to set
-	 */
 	public void setNodeGroups(List<NodeGroup> nodeGroups) {
 		this.nodeGroups = nodeGroups;
 	}
-
-	/**
-	 * @return the nodeClasses
-	 */
-	public List<NodeClass> getNodeClasses() {
-		return nodeClasses;
-	}
-
-	/**
-	 * @param nodeClasses the nodeClasses to set
-	 */
-	public void setNodeClasses(List<NodeClass> nodeClasses) {
-		this.nodeClasses = nodeClasses;
-	}
-	
-	
 
 }
