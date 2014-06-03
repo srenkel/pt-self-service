@@ -10,9 +10,11 @@ import com.capgemini.pt.entity.Version;
 
 public interface IArtifactManager {
 
-	public List<Version> findAvailableArtifactVersions(Artifact artifact) throws VersionRangeResolutionException;
+	public List<Version> findAvailableArtifactVersions(Artifact artifact)
+			throws VersionRangeResolutionException;
 
-	public Version findNewestArtifactVersion(Artifact artifact);
+	public Version findNewestArtifactVersion(Artifact artifact)
+			throws VersionRangeResolutionException;
 
 	public File resolveArtifact(Artifact artifact);
 
