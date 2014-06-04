@@ -104,7 +104,6 @@ public class ServiceManager extends GsonRestResource implements IServiceManager 
 	@Override
 	@MethodMapping(value = "/deploy", httpMethod = HttpMethod.POST)
 	public boolean deploy(@RequestBody Definition definitionToDeploy) {
-		// TODO Auto-generated method stub
 		return manager.deploy(definitionToDeploy);
 	}
 

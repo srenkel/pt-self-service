@@ -1,19 +1,24 @@
 package com.capgemini.pt.core.data;
 
-import java.io.FileNotFoundException;
 import java.util.List;
 
+import com.capgemini.pt.core.data.yaml.base.BaseConfiguration;
+import com.capgemini.pt.core.data.yaml.puppet.PuppetConfiguration;
 import com.capgemini.pt.entity.Application;
 import com.capgemini.pt.entity.Increment;
 
 public interface IConfigurationManager {
-	
+
 	public List<Application> getApplications();
-	
+
 	public List<Increment> getIncrementsForApplication(Application application);
-	
-	public boolean addConfigurationToNode(Object todo, Object todo2);
-	
-	public boolean clearConfigurationFromNode(Object todo, Object todo2);
+
+	public BaseConfiguration getSelfServiceConfiguration();
+
+	public PuppetConfiguration getPupperHieraConfiguration();
+
+	public boolean storeSelfServiceConfiguration(BaseConfiguration base);
+
+	public boolean storePupperHieraConfiguration(PuppetConfiguration puppetConf);
 
 }
