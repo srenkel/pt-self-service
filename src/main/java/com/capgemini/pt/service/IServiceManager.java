@@ -31,6 +31,6 @@ public interface IServiceManager {
 
 	public Definition saveDefinition(Definition definition);
 
-	public Definition deploy(Definition definition);
+	public boolean deploy(Definition definition);
 
 }

@@ -116,7 +116,7 @@ body {
 }
 
 /* SECTIONS */
-.mainView {
+.deploy {
 	margin: 0px;
 	padding: 0px;
 	box-shadow: 10px 10px 5px #888888;
@@ -135,7 +135,7 @@ body {
 	border-top-left-radius: 10px;
 }
 
-.mainView h1 {
+.deploy h1 {
 	padding: 5px;
 	margin: 0;
 	text-align: left;
@@ -160,7 +160,7 @@ body {
 	color: #ffffff;
 }
 
-.mainView h2 {
+.deploy h2 {
 	padding: 5px;
 	margin: 0;
 	text-align: left;
@@ -176,6 +176,10 @@ body {
 	font-size: 12px;
 	font-family: Arial;
 	color: #ffffff;
+}
+
+.deploy select {
+	width: 275px;
 }
 
 /* LAYOUT POSITION */

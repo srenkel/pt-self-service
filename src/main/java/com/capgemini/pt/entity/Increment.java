@@ -1,5 +1,23 @@
 package com.capgemini.pt.entity;
 
-public class Increment {
+import java.io.Serializable;
 
+public class Increment implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private String name;
+
+	/**
+	 * @param name
+	 */
+	public Increment(String name) {
+		super();
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 }

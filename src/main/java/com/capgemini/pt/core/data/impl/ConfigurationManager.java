@@ -3,6 +3,7 @@
  */
 package com.capgemini.pt.core.data.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.capgemini.pt.core.data.IConfigurationManager;
@@ -17,13 +18,20 @@ public class ConfigurationManager implements IConfigurationManager {
 	@Override
 	public List<Application> getApplications() {
 		// TODO Auto-generated method stub
-		return null;
+		List<Application> apps = new ArrayList<Application>();
+		apps.add(new Application("TANGO"));
+		apps.add(new Application("COMPASS"));
+		return apps;
 	}
 
 	@Override
-	public List<Increment> getIncrementsForApplication() {
+	public List<Increment> getIncrementsForApplication(Application application) {
 		// TODO Auto-generated method stub
-		return null;
+		List<Increment> incs = new ArrayList<Increment>();
+		incs.add(new Increment("Increment 1"));
+		incs.add(new Increment("Increment 2"));
+		incs.add(new Increment("Increment 3"));
+		return incs;
 	}
 
 	@Override

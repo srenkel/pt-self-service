@@ -11,6 +11,9 @@ import com.capgemini.pt.core.data.impl.FileManager;
 import com.capgemini.pt.core.data.impl.PuppetAgentManager;
 import com.capgemini.pt.core.data.impl.PuppetDataManager;
 import com.capgemini.pt.core.data.impl.SelfServiceDataManager;
+import com.capgemini.pt.entity.ApplicationStatus;
+import com.capgemini.pt.entity.Definition;
+import com.capgemini.pt.entity.Status;
 import com.capgemini.pt.puppet.IPuppetAgentManager;
 
 public class SelfServiceManager {
@@ -55,4 +58,12 @@ public class SelfServiceManager {
 		return puppetAgentManager;
 	}
 
+	public boolean deploy(Definition definitionToDeploy) {
+		System.out.println(definitionToDeploy.toString());
+		getSelfServiceDataManager().storeApplicationStatus(
+				new ApplicationStatus(definitionToDeploy.getEnv(),
+						definitionToDeploy.getBuild(), definitionToDeploy
+								.getApp(), Status.INSTALLING));
+		return true;
+	}
 }

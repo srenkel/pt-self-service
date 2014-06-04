@@ -5,6 +5,7 @@ public class Artifact {
 	private String groupId;
 	private String artifactId;
 	private String version;
+	private boolean isWar = true;
 
 	/**
 	 * @param groupId
@@ -16,6 +17,15 @@ public class Artifact {
 		this.groupId = groupId;
 		this.artifactId = artifactId;
 		this.version = version;
+		this.isWar = true;
+	}
+
+	public boolean isWar() {
+		return isWar;
+	}
+
+	public void setWar(boolean isWar) {
+		this.isWar = isWar;
 	}
 
 	/**

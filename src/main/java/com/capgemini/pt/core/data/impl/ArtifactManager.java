@@ -136,8 +136,9 @@ public class ArtifactManager implements IArtifactManager {
 		RepositorySystemSession session = getRepositorySession();
 
 		Artifact art = new DefaultArtifact(artifact.getGroupId() + ":"
-				+ artifact.getArtifactId() + ":" + artifact.getVersion());
+				+ artifact.getArtifactId() + ":" + (artifact.isWar() == true ? "war:" : "") + artifact.getVersion());
 
+		art.setFile(new File("target/artifact"));
 		ArtifactRequest artifactRequest = new ArtifactRequest();
 		artifactRequest.setArtifact(art);
 		artifactRequest.setRepositories(SelfServiceConfigurationManager

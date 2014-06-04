@@ -3,6 +3,8 @@
  */
 package com.capgemini.pt.service;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -15,6 +17,7 @@ import org.wicketstuff.rest.resource.gson.GsonRestResource;
 import org.wicketstuff.rest.utils.http.HttpMethod;
 
 import com.capgemini.pt.core.SelfServiceManager;
+import com.capgemini.pt.core.data.impl.ArtifactManager;
 import com.capgemini.pt.entity.Application;
 import com.capgemini.pt.entity.ApplicationStatus;
 import com.capgemini.pt.entity.Artifact;
@@ -34,17 +37,24 @@ public class ServiceManager extends GsonRestResource implements IServiceManager 
 
 	private SelfServiceManager manager = new SelfServiceManager();
 
+	@MethodMapping(value = "/test", httpMethod = HttpMethod.GET)
+	public List<Application> test() {
+		ArtifactManager manager = new ArtifactManager();
+		File art = manager.resolveArtifact(new Artifact(
+				"org.glassfish.main.admingui", "war", "4.0"));
+		System.out.println("file " + art.toString());
+		return null;
+	}
+
 	@Override
 	@MethodMapping(value = "/applications", httpMethod = HttpMethod.GET)
 	public List<Application> getApplications() {
-		// TODO Auto-generated method stub
-		return null;
+		return manager.getConfigurationManager().getApplications();
 	}
 
 	@Override
 	@MethodMapping(value = "/environments", httpMethod = HttpMethod.GET)
 	public List<Environment> getEnvironments() {
-		// TODO Auto-generated method stub
 		return manager.getPuppetDataManager().getEnvironments();
 	}
 
@@ -75,8 +85,8 @@ public class ServiceManager extends GsonRestResource implements IServiceManager 
 	@MethodMapping(value = "/increments", httpMethod = HttpMethod.POST)
 	public List<Increment> getIncrementsForApplication(
 			@RequestBody Application app) {
-		// TODO Auto-generated method stub
-		return null;
+		return manager.getConfigurationManager().getIncrementsForApplication(
+				app);
 	}
 
 	@Override
@@ -100,15 +110,14 @@ public class ServiceManager extends GsonRestResource implements IServiceManager 
 	@Override
 	@MethodMapping(value = "/definitions", httpMethod = HttpMethod.POST)
 	public Definition saveDefinition(@RequestBody Definition definition) {
-		// TODO Auto-generated method stub
 		return manager.getSelfServiceDataManager().storeDefinition(definition);
 	}
 
 	@Override
 	@MethodMapping(value = "/deploy", httpMethod = HttpMethod.POST)
-	public Definition deploy(@RequestBody Definition definition) {
+	public boolean deploy(@RequestBody Definition definitionToDeploy) {
 		// TODO Auto-generated method stub
-		return null;
+		return manager.deploy(definitionToDeploy);
 	}
 
 }

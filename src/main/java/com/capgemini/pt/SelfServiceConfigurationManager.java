@@ -10,7 +10,7 @@ import org.eclipse.aether.util.repository.AuthenticationBuilder;
 
 public class SelfServiceConfigurationManager {
 
-	private static final String DEFAULT_REPOSITORY_URL = "https://seu.sdm.de/pu/srenkel/build/nexus/content/repositories/repo.jenkins-ci.org";
+	private static final String DEFAULT_REPOSITORY_URL = "http://central.maven.org/maven2/";
 	private static final String DEFAULT_DATABASESERVER_CLASS_IDENTIFIER = "databaseserver";
 	private static final String DEFAULT_APPLICATIONSERVER_CLASS_IDENTIFIER = "applicationserver";
 	private static final String DEFAULT_ENVIRONMENT_GROUP_IDENTIFIER = "environment";

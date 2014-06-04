@@ -1,7 +1,13 @@
 package com.capgemini.pt.entity;
 
-public class Environment {
+import java.io.Serializable;
 
+public class Environment implements Serializable{
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String name;
 
 	public Environment(String name) {

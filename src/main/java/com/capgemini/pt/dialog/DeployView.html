@@ -3,7 +3,48 @@
 <head></head>
 <body>
 	<wicket:extend>
-		<h1 wicket:id="viewTitle">Title</h1>
+		<div class="deploy clear">
+			<form wicket:id="deployForm">
+				<div class="application box left third margin">
+					<p>
+						<label for="applicationDropDown">Application</label> <br /> <select
+							id="applicationDropDown" wicket:id="applicationDropDown"></select>
+						<select id="incrementDropDown" wicket:id="incrementDropDown"></select>
+					</p>
+				</div>
+				<div class="definition box right twothird margin">
+					<p>
+						<label for="definitionDropDown">Definition</label> <br /> <select
+							id="definitionDropDown" wicket:id="definitionDropDown"></select>
+						<input type="submit" value="Load" /> <input type="submit"
+							value="Save" />
+					</p>
+				</div>
+				<div class="build box left clear third margin">
+					<p>
+						<label for="versionDropDown">Build</label> <br /> <select
+							id="versionDropDown" wicket:id="versionDropDown"></select>
+					</p>
+				</div>
+				<div class="environment box left third margin">
+					<p>
+						<label for="environmentDropDown">Environment</label> <br /> <select
+							id="environmentDropDown" wicket:id="environmentDropDown"></select>
+					</p>
+				</div>
+				<div class="database box left third margin">
+					<p>
+						<label for="databaseSchemaDropDown">Database schema</label> <br />
+						<select id="databaseSchemaDropDown"
+							wicket:id="databaseSchemaDropDown"></select>
+					</p>
+				</div>
+				<div class="buttons box right third margin">
+					<input type="submit" value="Deploy" />
+				</div>
+			</form>
+			<div class="clear"></div>
+		</div>
 	</wicket:extend>
 </body>
 </html>

@@ -16,6 +16,8 @@ import org.apache.wicket.model.ResourceModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import com.capgemini.pt.SelfServiceApplication;
+import com.capgemini.pt.service.IServiceManager;
+import com.capgemini.pt.service.ServiceManager;
 
 /**
 *
@@ -23,33 +25,37 @@ import com.capgemini.pt.SelfServiceApplication;
 public abstract class BaseView extends WebPage {
 	private static final long serialVersionUID = 1L;
 
+	protected transient IServiceManager service = new ServiceManager();
+
 	public BaseView() {
 		this(new PageParameters());
 	}
-	
+
 	public BaseView(final PageParameters parameters) {
 		super(parameters);
-		
+
 		add(new Label("pageTitle", new ResourceModel("label.static.page-title",
 				"Deployment Manager")));
-		
+
 		FeedbackPanel f = new FeedbackPanel("feedback");
 		add(f);
-		
+
 		addBookmarkables();
-		
+
 		SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm");
-		add(new Label("footer", SelfServiceApplication.getPortalVersion() + " - "
-				+ format.format(Calendar.getInstance().getTime()) + " - "
-				+ TimeZone.getDefault().getDisplayName() + " - "
+		add(new Label("footer", SelfServiceApplication.getPortalVersion()
+				+ " - " + format.format(Calendar.getInstance().getTime())
+				+ " - " + TimeZone.getDefault().getDisplayName() + " - "
 				+ getSession().getLocale().getDisplayLanguage()));
-    }
-	
-	private void addBookmarkables(){
-		add(new BookmarkablePageLink<WebPage>("dashboardLink", DashboardView.class));
-		add(new BookmarkablePageLink<WebPage>("newProjectLink", DeployView.class));
 	}
-	
+
+	private void addBookmarkables() {
+		add(new BookmarkablePageLink<WebPage>("dashboardLink",
+				DashboardView.class));
+		add(new BookmarkablePageLink<WebPage>("newProjectLink",
+				DeployView.class));
+	}
+
 	protected void setPageTitle(IModel<?> model) {
 		get("pageTitle").setDefaultModel(model);
 	}

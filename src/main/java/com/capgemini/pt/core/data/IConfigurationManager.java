@@ -9,7 +9,7 @@ public interface IConfigurationManager {
 	
 	public List<Application> getApplications();
 	
-	public List<Increment> getIncrementsForApplication();
+	public List<Increment> getIncrementsForApplication(Application application);
 	
 	public boolean addConfigurationToNode(Object todo, Object todo2);
 	
