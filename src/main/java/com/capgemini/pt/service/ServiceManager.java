@@ -3,8 +3,6 @@
  */
 package com.capgemini.pt.service;
 
-import java.io.File;
-import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,7 +15,6 @@ import org.wicketstuff.rest.resource.gson.GsonRestResource;
 import org.wicketstuff.rest.utils.http.HttpMethod;
 
 import com.capgemini.pt.core.SelfServiceManager;
-import com.capgemini.pt.core.data.impl.ArtifactManager;
 import com.capgemini.pt.entity.Application;
 import com.capgemini.pt.entity.ApplicationStatus;
 import com.capgemini.pt.entity.Artifact;
@@ -36,15 +33,6 @@ public class ServiceManager extends GsonRestResource implements IServiceManager 
 	private static final long serialVersionUID = 1L;
 
 	private SelfServiceManager manager = new SelfServiceManager();
-
-	@MethodMapping(value = "/test", httpMethod = HttpMethod.GET)
-	public List<Application> test() {
-		ArtifactManager manager = new ArtifactManager();
-		File art = manager.resolveArtifact(new Artifact(
-				"org.glassfish.main.admingui", "war", "4.0"));
-		System.out.println("file " + art.toString());
-		return null;
-	}
 
 	@Override
 	@MethodMapping(value = "/applications", httpMethod = HttpMethod.GET)
