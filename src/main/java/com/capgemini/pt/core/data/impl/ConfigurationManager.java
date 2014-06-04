@@ -18,6 +18,9 @@ import org.yaml.snakeyaml.constructor.Constructor;
 
 import com.capgemini.pt.SelfServiceConfigurationManager;
 import com.capgemini.pt.core.data.IConfigurationManager;
+import com.capgemini.pt.core.data.yaml.applications.App;
+import com.capgemini.pt.core.data.yaml.applications.ApplicationConfiguration;
+import com.capgemini.pt.core.data.yaml.applications.Inc;
 import com.capgemini.pt.core.data.yaml.base.BaseConfiguration;
 import com.capgemini.pt.core.data.yaml.puppet.PuppetConfiguration;
 import com.capgemini.pt.entity.Application;
@@ -30,60 +33,89 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	@Override
 	public List<Application> getApplications() {
-		Map<String, Map<String, String>> values;
-		try {
-			values = getApplicationsConfigurationYamlValues();
-			List<Application> applications = new ArrayList<Application>();
+		List<Application> applications = new ArrayList<Application>();
 
-			for (String key : values.keySet()) {
-				if (key.equals(SelfServiceConfigurationManager
-						.getYamlApplicationSectionIdentifier())) {
-					Map<String, String> subValues = values.get(key);
-					for (String subValueKey : subValues.keySet()) {
-						applications.add(new Application(subValueKey));
-					}
-				}
-			}
-			return applications;
-		} catch (FileNotFoundException e) {
-			return new ArrayList<Application>();
+		Map<String, App> appMap = getApplicationsConfiguration().applications;
+
+		for (String key : appMap.keySet()) {
+			applications.add(new Application(appMap.get(key).name, appMap
+					.get(key).groupId));
 		}
-
+		return applications;
 	}
 
 	@Override
 	public List<Increment> getIncrementsForApplication(Application application) {
-		Map<String, Map<String, String>> values;
-		try {
-			values = getApplicationsConfigurationYamlValues();
-			List<Increment> incs = new ArrayList<Increment>();
+		List<Increment> incs = new ArrayList<Increment>();
 
-			for (String key : values.keySet()) {
-				if (key.equals(SelfServiceConfigurationManager
-						.getYamlApplicationSectionIdentifier())) {
-					Map<String, String> subValues = values.get(key);
-					for (String subValueKey : subValues.keySet()) {
-						if (subValueKey.equals(application.getName())) {
-							String incrementsArrayString = String.format("%s",
-									subValues.get(subValueKey));
+		Map<String, App> appMap = getApplicationsConfiguration().applications;
 
-							String[] incrementsArray = incrementsArrayString
-									.replace("[", "").replace("]", "")
-									.split(", ");
-							for (int i = 0; i < incrementsArray.length; i++) {
-								String incString = incrementsArray[i];
-								incs.add(new Increment(incString));
-							}
-						}
-					}
+		for (String key : appMap.keySet()) {
+			if (appMap.get(key).name.equals(application.getName())) {
+				List<Inc> increments = appMap.get(key).increments;
+				for (int i = 0; i < increments.size(); i++) {
+					Inc inc = increments.get(i);
+					incs.add(new Increment(inc.name, inc.artifactId));
 				}
 			}
-			return incs;
-		} catch (FileNotFoundException e) {
-			return new ArrayList<Increment>();
 		}
-
+		return incs;
 	}
+
+	public ApplicationConfiguration getApplicationsConfiguration() {
+		Constructor constructor = new Constructor(
+				ApplicationConfiguration.class);
+		TypeDescription description = new TypeDescription(
+				ApplicationConfiguration.class);
+		constructor.addTypeDescription(description);
+
+		Yaml yaml = new Yaml(constructor);
+		try {
+			FileInputStream stream = new FileInputStream(new File(
+					SelfServiceConfigurationManager
+							.getDefaultApplicationsFilePath()
+							+ SelfServiceConfigurationManager
+									.getApplicationsConfigurationFilename()));
+
+			ApplicationConfiguration appsConfig = (ApplicationConfiguration) yaml
+					.load(stream);
+			stream.close();
+			
+			return appsConfig;
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return null;
+
+	};
+
+	public boolean storeApplicationsConfiguration(
+			ApplicationConfiguration appsConfig) {
+		Constructor constructor = new Constructor(
+				ApplicationConfiguration.class);
+		TypeDescription description = new TypeDescription(
+				ApplicationConfiguration.class);
+		constructor.addTypeDescription(description);
+
+		Yaml yaml = new Yaml(constructor);
+
+		try {
+			FileWriter writer = new FileWriter(
+					SelfServiceConfigurationManager
+							.getDefaultApplicationsFilePath()
+							+ SelfServiceConfigurationManager
+									.getApplicationsConfigurationFilename());
+			yaml.dump(appsConfig, writer);
+			writer.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
+	};
 
 	// private Map<String, Map<String, String>> getPuppetHieraYamlValues()
 	// throws FileNotFoundException {
@@ -101,27 +133,27 @@ public class ConfigurationManager implements IConfigurationManager {
 	// return values;
 	// }
 
-	private Map<String, Map<String, String>> getApplicationsConfigurationYamlValues()
-			throws FileNotFoundException {
-		Yaml yaml = new Yaml();
-
-		FileInputStream stream = new FileInputStream(new File(
-				SelfServiceConfigurationManager
-						.getDefaultApplicationsFilePath()
-						+ SelfServiceConfigurationManager
-								.getApplicationsConfigurationFilename()));
-
-		@SuppressWarnings("unchecked")
-		Map<String, Map<String, String>> values = (Map<String, Map<String, String>>) yaml
-				.load(stream);
-		try {
-			stream.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		return values;
-	}
+//	private Map<String, Map<String, String>> getApplicationsConfigurationYamlValues()
+//			throws FileNotFoundException {
+//		Yaml yaml = new Yaml();
+//
+//		FileInputStream stream = new FileInputStream(new File(
+//				SelfServiceConfigurationManager
+//						.getDefaultApplicationsFilePath()
+//						+ SelfServiceConfigurationManager
+//								.getApplicationsConfigurationFilename()));
+//
+//		@SuppressWarnings("unchecked")
+//		Map<String, Map<String, String>> values = (Map<String, Map<String, String>>) yaml
+//				.load(stream);
+//		try {
+//			stream.close();
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
+//		return values;
+//	}
 
 	// private Map<String, Map<String, String>>
 	// getSelfServiceConfigurationYamlValues()
@@ -152,7 +184,6 @@ public class ConfigurationManager implements IConfigurationManager {
 				BaseConfiguration.class);
 		constructor.addTypeDescription(description);
 
-		constructor.addTypeDescription(description);
 		Yaml yaml = new Yaml(constructor);
 
 		try {
@@ -181,7 +212,6 @@ public class ConfigurationManager implements IConfigurationManager {
 				BaseConfiguration.class);
 		constructor.addTypeDescription(description);
 
-		constructor.addTypeDescription(description);
 		Yaml yaml = new Yaml(constructor);
 
 		try {
@@ -208,7 +238,6 @@ public class ConfigurationManager implements IConfigurationManager {
 				PuppetConfiguration.class);
 		constructor.addTypeDescription(description);
 
-		constructor.addTypeDescription(description);
 		Yaml yaml = new Yaml(constructor);
 
 		try {
@@ -239,7 +268,6 @@ public class ConfigurationManager implements IConfigurationManager {
 				PuppetConfiguration.class);
 		constructor.addTypeDescription(description);
 
-		constructor.addTypeDescription(description);
 		Yaml yaml = new Yaml(constructor);
 
 		try {

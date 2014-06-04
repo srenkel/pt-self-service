@@ -1,0 +1,17 @@
+applications :
+  path : 'C:/glassfish3/glassfish/domains/domain1/config/yaml/'
+  file : applications.yaml
+puppet :
+  path : 'C:/Users/sebi/workspace/pt-self-service/yaml/'
+  file : hiera.yaml
+repositories :
+  - http://central.maven.org/maven2/
+  - http://repo.test.vm/internalrepo/
+identifier :
+  databaseserver : databaseserver
+  applicationserver : applicationserver
+  environment : environment
+  schema : database
+  applicationsection : APPLICATIONS
+  
+  

@@ -121,7 +121,7 @@ public class SelfServiceConfigurationManager {
 		String identifier = configManager.getSelfServiceConfiguration().identifier.schema;
 
 		if (identifier != null && !identifier.equals("")) {
-			return identifier;
+			return identifier + "::";
 		} else {
 			return DEFAULT_DATABASE_SCHEMA_IDENTIFIER + "::";
 		}

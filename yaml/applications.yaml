@@ -1,0 +1,15 @@
+APPLICATIONS :
+  TANGO :
+    - Increment 1
+    - Increment 2
+    - Increment 3
+  COMPASS :
+    - Increment 1
+    - Increment 2
+  TESTAPP :
+    - Increment 1
+  PT-SELF-SERVICE :
+    - Big Version 1
+    - Big Version 2
+    - Big Version 3
+    - Big Version 4

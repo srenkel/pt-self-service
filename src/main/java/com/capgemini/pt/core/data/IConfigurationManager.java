@@ -17,6 +17,11 @@ public interface IConfigurationManager {
 
 	public PuppetConfiguration getPupperHieraConfiguration();
 
+//	public ApplicationConfiguration getApplicationsConfiguration();
+//
+//	public boolean storeApplicationsConfiguration(
+//			ApplicationConfiguration appsConfig);
+
 	public boolean storeSelfServiceConfiguration(BaseConfiguration base);
 
 	public boolean storePupperHieraConfiguration(PuppetConfiguration puppetConf);

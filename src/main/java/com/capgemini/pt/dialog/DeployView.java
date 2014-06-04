@@ -3,6 +3,12 @@
  */
 package com.capgemini.pt.dialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -38,29 +44,93 @@ public class DeployView extends BaseView {
 
 	public DeployView(final PageParameters parameters) {
 		super(parameters);
-		Form<?> form = new Form<Void>("deployForm") {
+		final Form<?> form = new Form<Void>("deployForm") {
 
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onSubmit() {
-				service.deploy(new Definition("Deployed Definition",
-						selectedApplication.getName(), selectedIncrement
-								.getName(), selectedVersion.getName(),
-						selectedEnvironment.getName(), selectedDatabaseSchema
-								.getName()));
-				setResponsePage(DashboardView.class);
+				// service.deploy(new Definition("Deployed Definition",
+				// selectedApplication.getName(), selectedIncrement
+				// .getName(), selectedVersion.getName(),
+				// selectedEnvironment.getName(), selectedDatabaseSchema
+				// .getName()));
+				// setResponsePage(DashboardView.class);
 
 			}
 		};
 
 		add(form);
-		form.add(getApplicationDropDown());
-		form.add(getIncrementDropDown());
-		form.add(getDefinitionDropDown());
-		form.add(getBuildDropDown());
-		form.add(getEnvironmentDropDown());
-		form.add(getDatabaseDropDown());
+
+		final DropDownChoice<Application> applicationDropDown = getApplicationDropDown();
+		form.add(applicationDropDown.setOutputMarkupId(true));
+
+		final DropDownChoice<Increment> incrementDropDown = getIncrementDropDown();
+		form.add(incrementDropDown.setEnabled(false).setOutputMarkupId(true));
+
+		final DropDownChoice<Version> buildDropDown = getBuildDropDown();
+		form.add(buildDropDown.setEnabled(false).setOutputMarkupId(true));
+
+		final DropDownChoice<Environment> environmentDropDown = getEnvironmentDropDown();
+		form.add(environmentDropDown.setEnabled(false).setOutputMarkupId(true));
+
+		final DropDownChoice<DatabaseSchema> databaseDropDown = getDatabaseDropDown();
+		form.add(databaseDropDown.setEnabled(false).setOutputMarkupId(true));
+
+		form.add(getDefinitionDropDown().setOutputMarkupId(true));
+
+		applicationDropDown.add(new OnChangeAjaxBehavior() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				selectedApplication = (Application) getComponent()
+						.getDefaultModelObject();
+				incrementDropDown.setEnabled(true);
+				incrementDropDown.setChoices(service
+						.getIncrementsForApplication(selectedApplication));
+				target.add(incrementDropDown);
+
+			}
+		});
+
+		incrementDropDown.add(new OnChangeAjaxBehavior() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				selectedIncrement = (Increment) getComponent()
+						.getDefaultModelObject();
+				buildDropDown.setEnabled(true);
+				environmentDropDown.setEnabled(true);
+				buildDropDown.setChoices(service
+						.getBuildsForIncrement(new Artifact(selectedApplication
+								.getGroupId(), selectedIncrement
+								.getArtifactId(), "")));
+				target.add(buildDropDown);
+				target.add(environmentDropDown);
+
+			}
+		});
+
+		environmentDropDown.add(new OnChangeAjaxBehavior() {
+
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				selectedEnvironment = (Environment) getComponent()
+						.getDefaultModelObject();
+				databaseDropDown.setEnabled(true);
+				databaseDropDown.setChoices(service
+						.getSchemasForEnvironment(selectedEnvironment));
+				target.add(databaseDropDown);
+
+			}
+		});
+
 	}
 
 	private DropDownChoice<Application> getApplicationDropDown() {
@@ -71,11 +141,17 @@ public class DeployView extends BaseView {
 	}
 
 	private DropDownChoice<Increment> getIncrementDropDown() {
-		return new DropDownChoice<Increment>(
-				"incrementDropDown",
-				new PropertyModel<Increment>(this, "selectedIncrement"),
-				service.getIncrementsForApplication(new Application("Testapp")),
-				new ChoiceRenderer<Increment>("name"));
+		if (selectedApplication == null) {
+			return new DropDownChoice<Increment>("incrementDropDown",
+					new PropertyModel<Increment>(this, "selectedIncrement"),
+					new ArrayList<Increment>(), new ChoiceRenderer<Increment>(
+							"name"));
+		} else {
+			return new DropDownChoice<Increment>("incrementDropDown",
+					new PropertyModel<Increment>(this, "selectedIncrement"),
+					service.getIncrementsForApplication(selectedApplication),
+					new ChoiceRenderer<Increment>("name"));
+		}
 	}
 
 	private DropDownChoice<Definition> getDefinitionDropDown() {
@@ -86,10 +162,12 @@ public class DeployView extends BaseView {
 	}
 
 	private DropDownChoice<Version> getBuildDropDown() {
+		List<Version> versions = new ArrayList<Version>();
+		versions.add(new Version("Latest"));
+		versions.addAll(service.getBuildsForIncrement(new Artifact("hibernate",
+				"hibernate-annotations", null)));
 		return new DropDownChoice<Version>("versionDropDown",
-				new PropertyModel<Version>(this, "selectedVersion"),
-				service.getBuildsForIncrement(new Artifact("hibernate",
-						"hibernate-annotations", null)),
+				new PropertyModel<Version>(this, "selectedVersion"), versions,
 				new ChoiceRenderer<Version>("name"));
 	}
 
