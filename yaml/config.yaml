@@ -1,8 +1,8 @@
 applications :
-  path : 'C:/glassfish3/glassfish/domains/domain1/config/yaml/'
+  path : 'yaml/'
   file : applications.yaml
 puppet :
-  path : 'C:/Users/sebi/workspace/pt-self-service/yaml/'
+  path : 'yaml/'
   file : hiera.yaml
 repositories :
   - http://central.maven.org/maven2/
