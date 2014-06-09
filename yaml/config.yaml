@@ -13,5 +13,25 @@ identifier :
   environment : environment
   schema : database
   applicationsection : APPLICATIONS
-  
-  
+databases :
+  - name : production
+    username : 'testuser'
+    password : 'testpw'
+    resource_name : 'jdbc/ProductionDS'
+    database : 'production_schema_name'
+    use_unicode : false
+    character_encoding : 'UTF-8'
+    driver : 'javax.Mysql.Datasource'
+    resource_type : 'javax.sql.Datasource'
+    driver : 'com.mysql.jdbc.Driver'
+    fixed_host : 'puppetagent.test.vm'
+  - name : development
+    username : 'testdevuser'
+    password : 'testdevpw'
+    resource_name : 'jdbc/DevelopmentDS'
+    database : 'development_schema_name'
+    use_unicode : false
+    character_encoding : 'UTF-8'
+    driver : 'javax.Mysql.Datasource'
+    resource_type : 'javax.sql.Datasource'
+    driver : 'com.mysql.jdbc.Driver'
