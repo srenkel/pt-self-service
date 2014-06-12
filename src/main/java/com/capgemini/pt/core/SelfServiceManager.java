@@ -59,11 +59,13 @@ public class SelfServiceManager {
 	}
 
 	public boolean deploy(Definition definitionToDeploy) {
-		System.out.println(definitionToDeploy.toString());
 		getSelfServiceDataManager().storeApplicationStatus(
-				new ApplicationStatus(definitionToDeploy.getEnv(),
-						definitionToDeploy.getBuild(), definitionToDeploy
-								.getApp(), Status.INSTALLING));
+				new ApplicationStatus(definitionToDeploy.getEnv().getName(),
+						definitionToDeploy.getBuild().getName(),
+						definitionToDeploy.getApp().getName(),
+						Status.INSTALLING));
+		new ConfigurationManager()
+				.storePupperHieraConfigurationForDefinition(definitionToDeploy);
 		return true;
 	}
 }

@@ -3,7 +3,9 @@
  */
 package com.capgemini.pt.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.aether.resolution.VersionRangeResolutionException;
@@ -15,6 +17,9 @@ import org.wicketstuff.rest.resource.gson.GsonRestResource;
 import org.wicketstuff.rest.utils.http.HttpMethod;
 
 import com.capgemini.pt.core.SelfServiceManager;
+import com.capgemini.pt.core.data.yaml.puppet.Instance;
+import com.capgemini.pt.core.data.yaml.puppet.PuppetConfiguration;
+import com.capgemini.pt.core.data.yaml.puppet.Webapp;
 import com.capgemini.pt.entity.Application;
 import com.capgemini.pt.entity.ApplicationStatus;
 import com.capgemini.pt.entity.Artifact;
@@ -22,6 +27,7 @@ import com.capgemini.pt.entity.DatabaseSchema;
 import com.capgemini.pt.entity.Definition;
 import com.capgemini.pt.entity.Environment;
 import com.capgemini.pt.entity.Increment;
+import com.capgemini.pt.entity.Server;
 import com.capgemini.pt.entity.Version;
 
 /**

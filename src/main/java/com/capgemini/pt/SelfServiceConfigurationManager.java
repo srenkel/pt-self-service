@@ -139,6 +139,10 @@ public class SelfServiceConfigurationManager {
 			remoteRepositories.add(new RemoteRepository.Builder("repo" + i,
 					"default", repoUrl).build());
 		}
+		if (remoteRepositories.isEmpty()) {
+			remoteRepositories.add(new RemoteRepository.Builder("central",
+					"default", DEFAULT_REPOSITORY_URL).build());
+		}
 		return remoteRepositories;
 	}
 }

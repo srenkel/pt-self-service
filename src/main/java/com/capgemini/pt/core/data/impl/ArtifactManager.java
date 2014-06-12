@@ -5,6 +5,7 @@ package com.capgemini.pt.core.data.impl;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
@@ -16,6 +17,7 @@ import org.eclipse.aether.artifact.DefaultArtifact;
 import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
 import org.eclipse.aether.impl.DefaultServiceLocator;
 import org.eclipse.aether.repository.LocalRepository;
+import org.eclipse.aether.repository.RepositoryPolicy;
 import org.eclipse.aether.resolution.ArtifactRequest;
 import org.eclipse.aether.resolution.ArtifactResolutionException;
 import org.eclipse.aether.resolution.ArtifactResult;
@@ -78,7 +80,7 @@ public class ArtifactManager implements IArtifactManager {
 		// uncomment for console logging
 		// session.setTransferListener(new ConsoleTransferListener());
 		// session.setRepositoryListener(new ConsoleRepositoryListener());
-
+		session.setUpdatePolicy(RepositoryPolicy.UPDATE_POLICY_ALWAYS);
 		return session;
 	}
 
@@ -105,14 +107,18 @@ public class ArtifactManager implements IArtifactManager {
 			com.capgemini.pt.entity.Artifact artifact)
 			throws VersionRangeResolutionException {
 		List<com.capgemini.pt.entity.Version> outputVersions = new ArrayList<com.capgemini.pt.entity.Version>();
+		outputVersions.add(new com.capgemini.pt.entity.Version("Latest"));
+		
 		VersionRangeResult rangeResult = getVersionRangeResult(artifact);
 		List<Version> versions = rangeResult.getVersions();
-
+		Collections.sort(versions);
 		for (int i = 0; i < versions.size(); i++) {
 			Version vers = versions.get(i);
 			outputVersions.add(new com.capgemini.pt.entity.Version(vers
 					.toString()));
 		}
+		
+		
 		return outputVersions;
 	}
 
@@ -136,7 +142,9 @@ public class ArtifactManager implements IArtifactManager {
 		RepositorySystemSession session = getRepositorySession();
 
 		Artifact art = new DefaultArtifact(artifact.getGroupId() + ":"
-				+ artifact.getArtifactId() + ":" + (artifact.isWar() == true ? "war:" : "") + artifact.getVersion());
+				+ artifact.getArtifactId() + ":"
+				+ (artifact.isWar() == true ? "war:" : "")
+				+ artifact.getVersion());
 
 		art.setFile(new File("target/artifact"));
 		ArtifactRequest artifactRequest = new ArtifactRequest();

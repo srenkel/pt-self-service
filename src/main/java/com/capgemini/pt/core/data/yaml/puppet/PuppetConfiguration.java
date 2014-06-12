@@ -1,16 +1,12 @@
 package com.capgemini.pt.core.data.yaml.puppet;
 
 import java.util.List;
-
-import com.capgemini.pt.core.data.yaml.base.Applications;
-import com.capgemini.pt.core.data.yaml.base.Identifier;
-import com.capgemini.pt.core.data.yaml.base.Puppet;
+import java.util.Map;
 
 public class PuppetConfiguration {
 
-	public Applications applications;
-	public Puppet puppet;
-	public List<String> repositories;
-	public Identifier identifier;
-
+	public List<String> role;
+//	public Map<String, Instance> instances;
+	public Map<String, Webapp> maven_webapps;
+	public Map<String, JNDIDatabase> jndi_databases;
 }

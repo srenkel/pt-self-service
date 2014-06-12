@@ -120,7 +120,8 @@ public class PuppetDataManager extends DatabaseManager implements
 				if (nodeClass.getName().startsWith(
 						SelfServiceConfigurationManager
 								.getDatabaseSchemaClassIdentifier())) {
-					schemas.add(new DatabaseSchema(nodeClass.getName()));
+					schemas.add(new DatabaseSchema(nodeClass.getName(), server
+							.getName()));
 				}
 			}
 

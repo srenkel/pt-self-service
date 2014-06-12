@@ -3,14 +3,19 @@
  */
 package com.capgemini.pt.core.data.impl;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Scanner;
 
 import org.yaml.snakeyaml.TypeDescription;
 import org.yaml.snakeyaml.Yaml;
@@ -22,9 +27,16 @@ import com.capgemini.pt.core.data.yaml.applications.App;
 import com.capgemini.pt.core.data.yaml.applications.ApplicationConfiguration;
 import com.capgemini.pt.core.data.yaml.applications.Inc;
 import com.capgemini.pt.core.data.yaml.base.BaseConfiguration;
+import com.capgemini.pt.core.data.yaml.base.DatabaseConfig;
+import com.capgemini.pt.core.data.yaml.puppet.Instance;
+import com.capgemini.pt.core.data.yaml.puppet.JNDIDatabase;
 import com.capgemini.pt.core.data.yaml.puppet.PuppetConfiguration;
+import com.capgemini.pt.core.data.yaml.puppet.Webapp;
 import com.capgemini.pt.entity.Application;
+import com.capgemini.pt.entity.Definition;
+import com.capgemini.pt.entity.Environment;
 import com.capgemini.pt.entity.Increment;
+import com.capgemini.pt.entity.Server;
 
 public class ConfigurationManager implements IConfigurationManager {
 
@@ -80,7 +92,7 @@ public class ConfigurationManager implements IConfigurationManager {
 			ApplicationConfiguration appsConfig = (ApplicationConfiguration) yaml
 					.load(stream);
 			stream.close();
-			
+
 			return appsConfig;
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -133,27 +145,29 @@ public class ConfigurationManager implements IConfigurationManager {
 	// return values;
 	// }
 
-//	private Map<String, Map<String, String>> getApplicationsConfigurationYamlValues()
-//			throws FileNotFoundException {
-//		Yaml yaml = new Yaml();
-//
-//		FileInputStream stream = new FileInputStream(new File(
-//				SelfServiceConfigurationManager
-//						.getDefaultApplicationsFilePath()
-//						+ SelfServiceConfigurationManager
-//								.getApplicationsConfigurationFilename()));
-//
-//		@SuppressWarnings("unchecked")
-//		Map<String, Map<String, String>> values = (Map<String, Map<String, String>>) yaml
-//				.load(stream);
-//		try {
-//			stream.close();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//		return values;
-//	}
+	// private Map<String, Map<String, String>>
+	// getApplicationsConfigurationYamlValues()
+	// throws FileNotFoundException {
+	// Yaml yaml = new Yaml();
+	//
+	// FileInputStream stream = new FileInputStream(new File(
+	// SelfServiceConfigurationManager
+	// .getDefaultApplicationsFilePath()
+	// + SelfServiceConfigurationManager
+	// .getApplicationsConfigurationFilename()));
+	//
+	// @SuppressWarnings("unchecked")
+	// Map<String, Map<String, String>> values = (Map<String, Map<String,
+	// String>>) yaml
+	// .load(stream);
+	// try {
+	// stream.close();
+	// } catch (IOException e) {
+	// e.printStackTrace();
+	// }
+	//
+	// return values;
+	// }
 
 	// private Map<String, Map<String, String>>
 	// getSelfServiceConfigurationYamlValues()
@@ -231,8 +245,7 @@ public class ConfigurationManager implements IConfigurationManager {
 
 	}
 
-	@Override
-	public PuppetConfiguration getPupperHieraConfiguration() {
+	public PuppetConfiguration getPuppetHieraConfiguration(Server server) {
 		Constructor constructor = new Constructor(PuppetConfiguration.class);
 		TypeDescription description = new TypeDescription(
 				PuppetConfiguration.class);
@@ -243,9 +256,9 @@ public class ConfigurationManager implements IConfigurationManager {
 		try {
 			FileInputStream stream = new FileInputStream(new File(
 					SelfServiceConfigurationManager
-							.getDefaultConfigurationFilePath()
-							+ SelfServiceConfigurationManager
-									.getSelfServiceConfigurationFilename()));
+							.getDefaultPuppetHieraFilePath()
+							+ "node/"
+							+ server.getName() + ".yaml"));
 
 			PuppetConfiguration puppetConf = (PuppetConfiguration) yaml
 					.load(stream);
@@ -262,7 +275,21 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public boolean storePupperHieraConfiguration(PuppetConfiguration puppetConf) {
+	public boolean storePupperHieraConfigurationForDefinition(
+			Definition definition) {
+		Map<Server, PuppetConfiguration> puppetConfigs = generatePuppetConfigurationFromDefinition(definition);
+
+		for (Entry<Server, PuppetConfiguration> entry : puppetConfigs
+				.entrySet()) {
+			Server server = entry.getKey();
+			PuppetConfiguration config = entry.getValue();
+			storePuppetHieraConfiguration(config, server);
+		}
+		return true;
+	}
+
+	private void storePuppetHieraConfiguration(PuppetConfiguration puppetConf,
+			Server server) {
 		Constructor constructor = new Constructor(PuppetConfiguration.class);
 		TypeDescription description = new TypeDescription(
 				PuppetConfiguration.class);
@@ -271,19 +298,148 @@ public class ConfigurationManager implements IConfigurationManager {
 		Yaml yaml = new Yaml(constructor);
 
 		try {
-			FileWriter writer = new FileWriter(
-					SelfServiceConfigurationManager
-							.getDefaultPuppetHieraFilePath()
-							+ SelfServiceConfigurationManager
-									.getPuppetHieraFilename());
+			String filePath = SelfServiceConfigurationManager
+					.getDefaultPuppetHieraFilePath()
+					+ "node/"
+					+ server.getName() + ".yaml";
+			FileWriter writer = new FileWriter(filePath);
 			yaml.dump(puppetConf, writer);
 			writer.close();
 
+			File path = new File(filePath);
+			Scanner scanner = new Scanner(path);
+			ArrayList<String> coll = new ArrayList<String>();
+			scanner.nextLine();
+			while (scanner.hasNextLine()) {
+				String line = scanner.nextLine();
+				coll.add(line);
+			}
+
+			scanner.close();
+
+			FileWriter writer2 = new FileWriter(path);
+			for (String line : coll) {
+				writer2.write(line);
+				writer2.write("\n");
+			}
+
+			writer2.close();
+
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
 		}
-		return true;
 	}
 
+	private Map<Server, PuppetConfiguration> generatePuppetConfigurationFromDefinition(
+			Definition definitionToDeploy) {
+		// GET SERVERS FOR CHOSEN ENVIRONMENT
+		PuppetDataManager puppetData = new PuppetDataManager();
+		ConfigurationManager configManager = new ConfigurationManager();
+		List<Server> servers = puppetData
+				.getServerForEnvironment(definitionToDeploy.getEnv());
+
+		Map<Server, PuppetConfiguration> puppetConfigs = new HashMap<Server, PuppetConfiguration>();
+
+		// FOR EACH SERVER GENERATE ITS CONFIG
+		for (int i = 0; i < servers.size(); i++) {
+			Server server = servers.get(i);
+
+			PuppetConfiguration puppetConf = getPuppetHieraConfiguration(server);
+			if (puppetConf == null) {
+				puppetConf = new PuppetConfiguration();
+			}
+			// ROLES
+			if (puppetConf.role == null) {
+				puppetConf.role = new ArrayList<String>();
+			}
+			if (server.isApp()
+					&& !puppetConf.role.contains("roles::applicationserver")) {
+				puppetConf.role.add("roles::applicationserver");
+			}
+			if (server.isDb()
+					&& !puppetConf.role.contains("roles::databaseserver")) {
+				puppetConf.role.add("roles::databaseserver");
+			}
+
+			if (server.isApp()) {
+				boolean isRoot = false;
+
+				if (puppetConf.maven_webapps == null) {
+					puppetConf.maven_webapps = new HashMap<String, Webapp>();
+					isRoot = true;
+				} else if (!puppetConf.maven_webapps.containsKey("ROOT")) {
+					isRoot = true;
+				}
+				String contextRoot = "ROOT";
+				if (!isRoot) {
+					int ident = 1;
+					if (puppetConf.maven_webapps.containsKey(definitionToDeploy
+							.getApp().getName().toLowerCase())) {
+						while (puppetConf.maven_webapps
+								.containsKey(definitionToDeploy.getApp()
+										.getName().toLowerCase()
+										+ ident)) {
+							ident++;
+						}
+						contextRoot = definitionToDeploy.getApp().getName()
+								.toLowerCase()
+								+ ident;
+					} else {
+						contextRoot = definitionToDeploy.getApp().getName()
+								.toLowerCase();
+					}
+				}
+				Webapp webapp = new Webapp();
+				webapp.groupid = definitionToDeploy.getApp().getGroupId();
+				webapp.artifactid = definitionToDeploy.getInc().getArtifactId();
+				webapp.version = definitionToDeploy.getBuild().getName();
+				webapp.instance = "tomcat_1";
+				webapp.repos = configManager.getSelfServiceConfiguration().repositories;
+				puppetConf.maven_webapps.put(contextRoot, webapp);
+
+				// TODO JNDI Datasources
+				if (puppetConf.jndi_databases == null) {
+					puppetConf.jndi_databases = new HashMap<String, JNDIDatabase>();
+				}
+
+				if (definitionToDeploy.getDbschema() != null) {
+					DatabaseConfig dbConfig = null;
+
+					for (int j = 0; j < configManager
+							.getSelfServiceConfiguration().databases.size(); j++) {
+						DatabaseConfig tmpConfig = configManager
+								.getSelfServiceConfiguration().databases.get(j);
+						if (tmpConfig.name.equals(definitionToDeploy
+								.getDbschema().getCleanedName())) {
+							dbConfig = tmpConfig;
+							break;
+						}
+					}
+					if (dbConfig != null
+							&& !puppetConf.jndi_databases
+									.containsKey(dbConfig.resource_name)) {
+						JNDIDatabase database = new JNDIDatabase();
+						database.instance = "tomcat_1";
+						database.database = dbConfig.database;
+						database.username = dbConfig.username;
+						database.password = dbConfig.password;
+						database.resource_name = dbConfig.resource_name;
+						database.host = definitionToDeploy.getDbschema()
+								.getHost();
+						database.use_unicode = dbConfig.use_unicode;
+						database.character_encoding = dbConfig.character_encoding;
+						
+						puppetConf.jndi_databases.put(dbConfig.resource_name,
+								database);
+					}
+				}
+			} else {
+				puppetConf.maven_webapps = new HashMap<String, Webapp>();
+				puppetConf.jndi_databases = new HashMap<String, JNDIDatabase>();
+			}
+
+			puppetConfigs.put(server, puppetConf);
+		}
+		return puppetConfigs;
+	}
 }

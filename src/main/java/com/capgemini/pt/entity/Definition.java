@@ -15,7 +15,7 @@ import javax.persistence.Table;
 @NamedQueries({
 		@NamedQuery(name = "Definition.findAll", query = "SELECT d FROM Definition d"),
 		@NamedQuery(name = "Definition.findByName", query = "SELECT d FROM Definition d WHERE d.name = :name") })
-public class Definition implements Serializable{
+public class Definition implements Serializable {
 
 	/**
 	 * 
@@ -27,11 +27,11 @@ public class Definition implements Serializable{
 	private Long oid;
 
 	private String name;
-	private String app;
-	private String inc;
-	private String build;
-	private String env;
-	private String dbschema;
+	private Application app;
+	private Increment inc;
+	private Version build;
+	private Environment env;
+	private DatabaseSchema dbschema;
 
 	public Definition() {
 		// TODO Auto-generated constructor stub
@@ -49,10 +49,10 @@ public class Definition implements Serializable{
 	 * @param inc
 	 * @param build
 	 * @param env
-	 * @param schema
+	 * @param dbschema
 	 */
-	public Definition(String name, String app, String inc, String build,
-			String env, String dbschema) {
+	public Definition(String name, Application app, Increment inc,
+			Version build, Environment env, DatabaseSchema dbschema) {
 		super();
 		this.name = name;
 		this.app = app;
@@ -80,7 +80,7 @@ public class Definition implements Serializable{
 	/**
 	 * @return the app
 	 */
-	public String getApp() {
+	public Application getApp() {
 		return app;
 	}
 
@@ -88,14 +88,14 @@ public class Definition implements Serializable{
 	 * @param app
 	 *            the app to set
 	 */
-	public void setApp(String app) {
+	public void setApp(Application app) {
 		this.app = app;
 	}
 
 	/**
 	 * @return the inc
 	 */
-	public String getInc() {
+	public Increment getInc() {
 		return inc;
 	}
 
@@ -103,14 +103,14 @@ public class Definition implements Serializable{
 	 * @param inc
 	 *            the inc to set
 	 */
-	public void setInc(String inc) {
+	public void setInc(Increment inc) {
 		this.inc = inc;
 	}
 
 	/**
 	 * @return the build
 	 */
-	public String getBuild() {
+	public Version getBuild() {
 		return build;
 	}
 
@@ -118,14 +118,14 @@ public class Definition implements Serializable{
 	 * @param build
 	 *            the build to set
 	 */
-	public void setBuild(String build) {
+	public void setBuild(Version build) {
 		this.build = build;
 	}
 
 	/**
 	 * @return the env
 	 */
-	public String getEnv() {
+	public Environment getEnv() {
 		return env;
 	}
 
@@ -133,23 +133,23 @@ public class Definition implements Serializable{
 	 * @param env
 	 *            the env to set
 	 */
-	public void setEnv(String env) {
+	public void setEnv(Environment env) {
 		this.env = env;
 	}
 
 	/**
-	 * @return the schema
+	 * @return the dbschema
 	 */
-	public String getSchema() {
+	public DatabaseSchema getDbschema() {
 		return dbschema;
 	}
 
 	/**
-	 * @param schema
-	 *            the schema to set
+	 * @param dbschema
+	 *            the dbschema to set
 	 */
-	public void setSchema(String schema) {
-		this.dbschema = schema;
+	public void setDbschema(DatabaseSchema dbschema) {
+		this.dbschema = dbschema;
 	}
 
 	public Long getOid() {

@@ -50,12 +50,11 @@ public class DeployView extends BaseView {
 
 			@Override
 			protected void onSubmit() {
-				// service.deploy(new Definition("Deployed Definition",
-				// selectedApplication.getName(), selectedIncrement
-				// .getName(), selectedVersion.getName(),
-				// selectedEnvironment.getName(), selectedDatabaseSchema
-				// .getName()));
-				// setResponsePage(DashboardView.class);
+				service.deploy(new Definition("Deployed Definition",
+						selectedApplication, selectedIncrement,
+						selectedVersion, selectedEnvironment,
+						selectedDatabaseSchema));
+				setResponsePage(DashboardView.class);
 
 			}
 		};
@@ -87,11 +86,17 @@ public class DeployView extends BaseView {
 			protected void onUpdate(AjaxRequestTarget target) {
 				selectedApplication = (Application) getComponent()
 						.getDefaultModelObject();
+				selectedIncrement = null;
+				selectedVersion = null;
+				selectedEnvironment = null;
+				selectedDatabaseSchema = null;
 				incrementDropDown.setEnabled(true);
 				incrementDropDown.setChoices(service
 						.getIncrementsForApplication(selectedApplication));
 				target.add(incrementDropDown);
-
+				target.add(buildDropDown.setEnabled(false));
+				target.add(environmentDropDown.setEnabled(false));
+				target.add(databaseDropDown.setEnabled(false));
 			}
 		});
 
@@ -105,10 +110,15 @@ public class DeployView extends BaseView {
 						.getDefaultModelObject();
 				buildDropDown.setEnabled(true);
 				environmentDropDown.setEnabled(true);
-				buildDropDown.setChoices(service
+				List<Version> versions = service
 						.getBuildsForIncrement(new Artifact(selectedApplication
 								.getGroupId(), selectedIncrement
-								.getArtifactId(), "")));
+								.getArtifactId(), ""));
+				buildDropDown.setChoices(versions);
+				selectedVersion = null;
+				selectedEnvironment = null;
+				selectedDatabaseSchema = null;
+				target.add(databaseDropDown.setEnabled(false));
 				target.add(buildDropDown);
 				target.add(environmentDropDown);
 
@@ -163,9 +173,6 @@ public class DeployView extends BaseView {
 
 	private DropDownChoice<Version> getBuildDropDown() {
 		List<Version> versions = new ArrayList<Version>();
-		versions.add(new Version("Latest"));
-		versions.addAll(service.getBuildsForIncrement(new Artifact("hibernate",
-				"hibernate-annotations", null)));
 		return new DropDownChoice<Version>("versionDropDown",
 				new PropertyModel<Version>(this, "selectedVersion"), versions,
 				new ChoiceRenderer<Version>("name"));
@@ -179,11 +186,10 @@ public class DeployView extends BaseView {
 	}
 
 	private DropDownChoice<DatabaseSchema> getDatabaseDropDown() {
-		return new DropDownChoice<DatabaseSchema>(
-				"databaseSchemaDropDown",
+		return new DropDownChoice<DatabaseSchema>("databaseSchemaDropDown",
 				new PropertyModel<DatabaseSchema>(this,
 						"selectedDatabaseSchema"),
-				service.getSchemasForEnvironment(new Environment("TANGO INT 1")),
-				new ChoiceRenderer<DatabaseSchema>("name"));
+				new ArrayList<DatabaseSchema>(),
+				new ChoiceRenderer<DatabaseSchema>("fullName"));
 	}
 }

@@ -21,7 +21,6 @@ databases :
     database : 'production_schema_name'
     use_unicode : false
     character_encoding : 'UTF-8'
-    driver : 'javax.Mysql.Datasource'
     resource_type : 'javax.sql.Datasource'
     driver : 'com.mysql.jdbc.Driver'
     fixed_host : 'puppetagent.test.vm'
@@ -32,6 +31,5 @@ databases :
     database : 'development_schema_name'
     use_unicode : false
     character_encoding : 'UTF-8'
-    driver : 'javax.Mysql.Datasource'
     resource_type : 'javax.sql.Datasource'
     driver : 'com.mysql.jdbc.Driver'
