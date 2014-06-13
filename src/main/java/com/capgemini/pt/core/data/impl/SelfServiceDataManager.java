@@ -12,7 +12,6 @@ import javax.persistence.Query;
 import com.capgemini.pt.core.data.ISelfServiceDataManager;
 import com.capgemini.pt.entity.ApplicationStatus;
 import com.capgemini.pt.entity.Definition;
-import com.capgemini.pt.entity.Status;
 import com.capgemini.pt.persistence.DatabaseManager;
 
 public class SelfServiceDataManager extends DatabaseManager implements
@@ -49,6 +48,7 @@ public class SelfServiceDataManager extends DatabaseManager implements
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<ApplicationStatus> getApplicationStatus() {
 		final Query query = getEntityManager().createNamedQuery(

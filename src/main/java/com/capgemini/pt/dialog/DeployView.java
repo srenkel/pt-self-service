@@ -6,7 +6,6 @@ package com.capgemini.pt.dialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.OnChangeAjaxBehavior;
 import org.apache.wicket.markup.html.form.ChoiceRenderer;

@@ -65,7 +65,7 @@ public class SelfServiceManager {
 						definitionToDeploy.getApp().getName(),
 						Status.INSTALLING));
 		new ConfigurationManager()
-				.storePupperHieraConfigurationForDefinition(definitionToDeploy);
+				.storePuppetHieraConfigurationForDefinition(definitionToDeploy);
 		return true;
 	}
 }

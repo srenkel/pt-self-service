@@ -1,14 +1,11 @@
 package com.capgemini.pt.core.data;
 
-import java.io.File;
 import java.util.List;
 
 import com.capgemini.pt.core.data.yaml.base.BaseConfiguration;
-import com.capgemini.pt.core.data.yaml.puppet.PuppetConfiguration;
 import com.capgemini.pt.entity.Application;
 import com.capgemini.pt.entity.Definition;
 import com.capgemini.pt.entity.Increment;
-import com.capgemini.pt.entity.Server;
 
 public interface IConfigurationManager {
 
@@ -18,7 +15,7 @@ public interface IConfigurationManager {
 
 	public BaseConfiguration getSelfServiceConfiguration();
 
-//	public PuppetConfiguration getPupperHieraConfiguration(Server server);
+//	public PuppetConfiguration getPuppetHieraConfiguration(Server server);
 
 //	public ApplicationConfiguration getApplicationsConfiguration();
 //
@@ -27,6 +24,6 @@ public interface IConfigurationManager {
 
 	public boolean storeSelfServiceConfiguration(BaseConfiguration base);
 
-	public boolean storePupperHieraConfigurationForDefinition(Definition definition);
+	public boolean storePuppetHieraConfigurationForDefinition(Definition definition);
 
 }

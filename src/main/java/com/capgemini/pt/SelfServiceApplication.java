@@ -10,14 +10,10 @@ import java.util.Properties;
 
 import org.apache.wicket.Page;
 import org.apache.wicket.protocol.http.WebApplication;
-import org.apache.wicket.request.resource.IResource;
-import org.apache.wicket.request.resource.ResourceReference;
 import org.wicketstuff.rest.utils.mounting.PackageScanner;
 
 import com.capgemini.pt.dialog.DashboardView;
 import com.capgemini.pt.dialog.DeployView;
-import com.capgemini.pt.service.IServiceManager;
-import com.capgemini.pt.service.ServiceManager;
 
 /**
  *

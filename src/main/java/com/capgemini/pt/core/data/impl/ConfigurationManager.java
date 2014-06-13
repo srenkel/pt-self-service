@@ -3,7 +3,6 @@
  */
 package com.capgemini.pt.core.data.impl;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -11,7 +10,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -28,13 +26,11 @@ import com.capgemini.pt.core.data.yaml.applications.ApplicationConfiguration;
 import com.capgemini.pt.core.data.yaml.applications.Inc;
 import com.capgemini.pt.core.data.yaml.base.BaseConfiguration;
 import com.capgemini.pt.core.data.yaml.base.DatabaseConfig;
-import com.capgemini.pt.core.data.yaml.puppet.Instance;
 import com.capgemini.pt.core.data.yaml.puppet.JNDIDatabase;
 import com.capgemini.pt.core.data.yaml.puppet.PuppetConfiguration;
 import com.capgemini.pt.core.data.yaml.puppet.Webapp;
 import com.capgemini.pt.entity.Application;
 import com.capgemini.pt.entity.Definition;
-import com.capgemini.pt.entity.Environment;
 import com.capgemini.pt.entity.Increment;
 import com.capgemini.pt.entity.Server;
 
@@ -275,7 +271,7 @@ public class ConfigurationManager implements IConfigurationManager {
 	}
 
 	@Override
-	public boolean storePupperHieraConfigurationForDefinition(
+	public boolean storePuppetHieraConfigurationForDefinition(
 			Definition definition) {
 		Map<Server, PuppetConfiguration> puppetConfigs = generatePuppetConfigurationFromDefinition(definition);
 
@@ -353,11 +349,11 @@ public class ConfigurationManager implements IConfigurationManager {
 				puppetConf.role = new ArrayList<String>();
 			}
 			if (server.isApp()
-					&& !puppetConf.role.contains("roles::applicationserver")) {
+					&& !puppetConf.role.contains("role::applicationserver")) {
 				puppetConf.role.add("roles::applicationserver");
 			}
 			if (server.isDb()
-					&& !puppetConf.role.contains("roles::databaseserver")) {
+					&& !puppetConf.role.contains("role::databaseserver")) {
 				puppetConf.role.add("roles::databaseserver");
 			}
 
