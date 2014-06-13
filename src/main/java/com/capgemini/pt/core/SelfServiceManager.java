@@ -1,5 +1,7 @@
 package com.capgemini.pt.core;
 
+import java.util.List;
+
 import com.capgemini.pt.core.data.IArtifactManager;
 import com.capgemini.pt.core.data.IConfigurationManager;
 import com.capgemini.pt.core.data.IFileManager;
@@ -13,6 +15,7 @@ import com.capgemini.pt.core.data.impl.PuppetDataManager;
 import com.capgemini.pt.core.data.impl.SelfServiceDataManager;
 import com.capgemini.pt.entity.ApplicationStatus;
 import com.capgemini.pt.entity.Definition;
+import com.capgemini.pt.entity.Server;
 import com.capgemini.pt.entity.Status;
 import com.capgemini.pt.puppet.IPuppetAgentManager;
 
@@ -58,14 +61,43 @@ public class SelfServiceManager {
 		return puppetAgentManager;
 	}
 
-	public boolean deploy(Definition definitionToDeploy) {
-		getSelfServiceDataManager().storeApplicationStatus(
-				new ApplicationStatus(definitionToDeploy.getEnv().getName(),
-						definitionToDeploy.getBuild().getName(),
-						definitionToDeploy.getApp().getName(),
-						Status.INSTALLING));
-		new ConfigurationManager()
+	public boolean deploy(final Definition definitionToDeploy) {
+		final ApplicationStatus appStatus = getSelfServiceDataManager()
+				.storeApplicationStatus(
+						new ApplicationStatus(definitionToDeploy.getEnv()
+								.getName(), definitionToDeploy.getBuild()
+								.getName(), definitionToDeploy.getApp()
+								.getName(), Status.INSTALLING));
+		final boolean successConfig = new ConfigurationManager()
 				.storePuppetHieraConfigurationForDefinition(definitionToDeploy);
-		return true;
+		Thread t = new Thread(new Runnable() {
+
+			@Override
+			public void run() {
+				List<Server> servers = getPuppetDataManager()
+						.getServerForEnvironment(definitionToDeploy.getEnv());
+				boolean successPuppetRuns = true;
+				if (successConfig) {
+					for (int i = 0; i < servers.size(); i++) {
+						final Server server = servers.get(i);
+						boolean partlySuccess = getPuppetAgentManager()
+								.invokePuppetRun(server);
+						if (!partlySuccess) {
+							successPuppetRuns = false;
+						}
+					}
+					if (successPuppetRuns) {
+						appStatus.setStatus(Status.SUCCESFULL);
+					} else {
+						appStatus.setStatus(Status.FAILURE);
+					}
+					getSelfServiceDataManager().storeApplicationStatus(
+							appStatus);
+				}
+			};
+
+		});
+		t.start();
+		return successConfig;
 	}
 }

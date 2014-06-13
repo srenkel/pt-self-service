@@ -15,15 +15,16 @@ public interface IConfigurationManager {
 
 	public BaseConfiguration getSelfServiceConfiguration();
 
-//	public PuppetConfiguration getPuppetHieraConfiguration(Server server);
+	// public PuppetConfiguration getPuppetHieraConfiguration(Server server);
 
-//	public ApplicationConfiguration getApplicationsConfiguration();
-//
-//	public boolean storeApplicationsConfiguration(
-//			ApplicationConfiguration appsConfig);
+	// public ApplicationConfiguration getApplicationsConfiguration();
+	//
+	// public boolean storeApplicationsConfiguration(
+	// ApplicationConfiguration appsConfig);
 
 	public boolean storeSelfServiceConfiguration(BaseConfiguration base);
 
-	public boolean storePuppetHieraConfigurationForDefinition(Definition definition);
+	public boolean storePuppetHieraConfigurationForDefinition(
+			Definition definition);
 
 }

@@ -6,12 +6,21 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.SecureRandom;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLPeerUnverifiedException;
 import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import org.apache.wicket.ajax.json.JSONException;
+import org.apache.wicket.ajax.json.JSONObject;
 
 public class TestConfigFile {
 
@@ -21,52 +30,61 @@ public class TestConfigFile {
 
 	private void testIt() {
 
-		String https_url = "https://192.168.33.100:8139/production/run/no_key";
-		URL url;
+		StringBuffer output = new StringBuffer();
+		boolean success = false;
 		try {
+			ProcessBuilder p = new ProcessBuilder("curl", "-k", "--show-error",
+					"-X", "PUT", "-H", "Content-Type: text/pson", "-d", "{}",
+					"https://192.168.33.101:8139/prodcution/run/no_key");
 
-			url = new URL(https_url);
-			HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
+			final Process shell = p.start();
+			shell.waitFor();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					shell.getInputStream()));
 
-			con.setRequestMethod("PUT");
-			con.setHostnameVerifier(new HostnameVerifier() {
-				@Override
-				public boolean verify(String hostname, SSLSession session) {
-					// TODO Auto-generated method stub
-					return true;
-				}
-			});
-
-			// Send post request
-			con.setDoOutput(true);
-			DataOutputStream wr = new DataOutputStream(con.getOutputStream());
-			wr.writeBytes("");
-			wr.flush();
-			wr.close();
-
-			int responseCode = con.getResponseCode();
-			System.out.println("\nSending 'POST' request to URL : " + url);
-			System.out.println("Post parameters : " + "");
-			System.out.println("Response Code : " + responseCode);
-
-			BufferedReader in = new BufferedReader(new InputStreamReader(
-					con.getInputStream()));
-			String inputLine;
-			StringBuffer response = new StringBuffer();
-
-			while ((inputLine = in.readLine()) != null) {
-				response.append(inputLine);
+			String line = "";
+			while ((line = reader.readLine()) != null) {
+				output.append(line + "\n");
 			}
-			in.close();
+			
+			try {
+				JSONObject json = new JSONObject(output.toString());
+				success = json.get("status").toString().equals("success") ? true : false;
+			} catch (JSONException e) {
+				e.printStackTrace();
+				System.out.println(false);
+			}
 
-			// print result
-			System.out.println(response.toString());
-
-		} catch (MalformedURLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
-		} catch (IOException e) {
+			System.out.println(false);
+		}
+
+		System.out.println(success);
+
+	}
+
+	private String executeCommand(String command) {
+
+		StringBuffer output = new StringBuffer();
+
+		Process p;
+		try {
+			p = Runtime.getRuntime().exec(command);
+			p.waitFor();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(
+					p.getInputStream()));
+
+			String line = "";
+			while ((line = reader.readLine()) != null) {
+				output.append(line + "\n");
+			}
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
+
+		return output.toString();
 
 	}
 

@@ -350,11 +350,11 @@ public class ConfigurationManager implements IConfigurationManager {
 			}
 			if (server.isApp()
 					&& !puppetConf.role.contains("role::applicationserver")) {
-				puppetConf.role.add("roles::applicationserver");
+				puppetConf.role.add("role::applicationserver");
 			}
 			if (server.isDb()
 					&& !puppetConf.role.contains("role::databaseserver")) {
-				puppetConf.role.add("roles::databaseserver");
+				puppetConf.role.add("role::databaseserver");
 			}
 
 			if (server.isApp()) {

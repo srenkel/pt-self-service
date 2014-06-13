@@ -15,6 +15,7 @@ import org.wicketstuff.rest.resource.gson.GsonRestResource;
 import org.wicketstuff.rest.utils.http.HttpMethod;
 
 import com.capgemini.pt.core.SelfServiceManager;
+import com.capgemini.pt.core.data.impl.PuppetAgentManager;
 import com.capgemini.pt.entity.Application;
 import com.capgemini.pt.entity.ApplicationStatus;
 import com.capgemini.pt.entity.Artifact;
@@ -22,6 +23,7 @@ import com.capgemini.pt.entity.DatabaseSchema;
 import com.capgemini.pt.entity.Definition;
 import com.capgemini.pt.entity.Environment;
 import com.capgemini.pt.entity.Increment;
+import com.capgemini.pt.entity.Server;
 import com.capgemini.pt.entity.Version;
 
 /**
