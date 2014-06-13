@@ -11,7 +11,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "definitions", schema = "deploymentmanager")
+@Table(name = "definitions", schema = "ptselfservice")
 @NamedQueries({
 		@NamedQuery(name = "Definition.findAll", query = "SELECT d FROM Definition d"),
 		@NamedQuery(name = "Definition.findByName", query = "SELECT d FROM Definition d WHERE d.name = :name") })

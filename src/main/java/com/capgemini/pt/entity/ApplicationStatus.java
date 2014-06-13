@@ -15,7 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "applicationstatus", schema = "deploymentmanager")
+@Table(name = "applicationstatus", schema = "ptselfservice")
 @NamedQuery(name = "ApplicationStatus.findAll", query = "SELECT a FROM ApplicationStatus a")
 public class ApplicationStatus {
 	@Id

@@ -5,6 +5,6 @@ package com.capgemini.pt.entity;
 
 public enum Status {
 
-	INSTALLING, FAILURE, SUCCESFULL, UPDATE;
+	INSTALLING, FAILURE, SUCCESSFUL, UPDATE;
 
 }

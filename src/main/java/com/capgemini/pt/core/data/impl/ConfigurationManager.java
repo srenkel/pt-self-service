@@ -356,6 +356,9 @@ public class ConfigurationManager implements IConfigurationManager {
 					&& !puppetConf.role.contains("role::databaseserver")) {
 				puppetConf.role.add("role::databaseserver");
 			}
+			if(server.isSe()){
+				puppetConf.role.add("role::softwareenvironment");
+			}
 
 			if (server.isApp()) {
 				boolean isRoot = false;

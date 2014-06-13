@@ -43,6 +43,7 @@ public class DeployView extends BaseView {
 
 	public DeployView(final PageParameters parameters) {
 		super(parameters);
+
 		final Form<?> form = new Form<Void>("deployForm") {
 
 			private static final long serialVersionUID = 1L;
@@ -120,7 +121,6 @@ public class DeployView extends BaseView {
 				target.add(databaseDropDown.setEnabled(false));
 				target.add(buildDropDown);
 				target.add(environmentDropDown);
-
 			}
 		});
 

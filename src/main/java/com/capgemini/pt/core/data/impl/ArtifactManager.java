@@ -80,7 +80,7 @@ public class ArtifactManager implements IArtifactManager {
 		// uncomment for console logging
 		// session.setTransferListener(new ConsoleTransferListener());
 		// session.setRepositoryListener(new ConsoleRepositoryListener());
-		session.setUpdatePolicy(RepositoryPolicy.UPDATE_POLICY_ALWAYS);
+		session.setUpdatePolicy(RepositoryPolicy.UPDATE_POLICY_INTERVAL + ":15");
 		return session;
 	}
 
@@ -108,7 +108,7 @@ public class ArtifactManager implements IArtifactManager {
 			throws VersionRangeResolutionException {
 		List<com.capgemini.pt.entity.Version> outputVersions = new ArrayList<com.capgemini.pt.entity.Version>();
 		outputVersions.add(new com.capgemini.pt.entity.Version("Latest"));
-		
+
 		VersionRangeResult rangeResult = getVersionRangeResult(artifact);
 		List<Version> versions = rangeResult.getVersions();
 		Collections.sort(versions);
@@ -117,8 +117,7 @@ public class ArtifactManager implements IArtifactManager {
 			outputVersions.add(new com.capgemini.pt.entity.Version(vers
 					.toString()));
 		}
-		
-		
+
 		return outputVersions;
 	}
 

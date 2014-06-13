@@ -5,17 +5,19 @@ public class Server {
 	private String name;
 	private boolean isApp;
 	private boolean isDb;
+	private boolean isSe;
 
 	/**
 	 * @param name
 	 * @param isApp
 	 * @param isDb
 	 */
-	public Server(String name, boolean isApp, boolean isDb) {
+	public Server(String name, boolean isApp, boolean isDb, boolean isSe) {
 		super();
 		this.name = name;
 		this.isApp = isApp;
 		this.isDb = isDb;
+		this.isSe = isSe;
 	}
 
 	/**
@@ -61,6 +63,21 @@ public class Server {
 	 */
 	public void setDb(boolean isDb) {
 		this.isDb = isDb;
+	}
+
+	/**
+	 * @return the isSe
+	 */
+	public boolean isSe() {
+		return isSe;
+	}
+
+	/**
+	 * @param isSe
+	 *            the isSe to set
+	 */
+	public void setSe(boolean isSe) {
+		this.isSe = isSe;
 	}
 
 }

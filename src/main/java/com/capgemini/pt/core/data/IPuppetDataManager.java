@@ -14,4 +14,5 @@ public interface IPuppetDataManager {
 
 	public List<DatabaseSchema> getSchemasForEnvironment(Environment environment);
 
+	public String getLastReportStatusForServer(Server server);
 }

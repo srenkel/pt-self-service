@@ -64,6 +64,7 @@ public class PuppetDataManager extends DatabaseManager implements
 			boolean isEnv = false;
 			boolean isApp = false;
 			boolean isDb = false;
+			boolean isSe = false;
 			for (int j = 0; j < groups.size(); j++) {
 				NodeGroup group = groups.get(j);
 				if (group.getName().equals(environment.getName())) {
@@ -85,8 +86,13 @@ public class PuppetDataManager extends DatabaseManager implements
 									.getDatabaseServerClassIdentifier())) {
 						isDb = true;
 					}
+					if (nodeClass.getName().equals(
+							SelfServiceConfigurationManager
+									.getSoftwareEnvironmentClassIdentifier())) {
+						isSe = true;
+					}
 				}
-				servers.add(new Server(node.getName(), isApp, isDb));
+				servers.add(new Server(node.getName(), isApp, isDb, isSe));
 			}
 		}
 		return servers;
@@ -103,6 +109,20 @@ public class PuppetDataManager extends DatabaseManager implements
 			}
 		}
 		return schemas;
+	}
+
+	@Override
+	public String getLastReportStatusForServer(Server server) {
+		final Query query = getEntityManager()
+				.createNativeQuery(
+						"SELECT r.status FROM reports r WHERE r.host=? ORDER BY r.id LIMIT 1");
+		query.setParameter(1, server.getName());
+		try {
+			return (String) query.getSingleResult();
+		} catch (Exception e) {
+			return "failed";
+		}
+
 	}
 
 	private List<DatabaseSchema> getSchemasForServer(Server server) {

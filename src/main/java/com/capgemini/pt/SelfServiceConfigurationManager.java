@@ -14,6 +14,7 @@ public class SelfServiceConfigurationManager {
 	private static final String DEFAULT_REPOSITORY_URL = "http://central.maven.org/maven2/";
 	private static final String DEFAULT_DATABASESERVER_CLASS_IDENTIFIER = "databaseserver";
 	private static final String DEFAULT_APPLICATIONSERVER_CLASS_IDENTIFIER = "applicationserver";
+	private static final String DEFAULT_SOFTWAREENVIRONMENT_CLASS_IDENTIFIER = "softwareenvironment";
 	private static final String DEFAULT_ENVIRONMENT_GROUP_IDENTIFIER = "environment";
 	private static final String DEFAULT_DATABASE_SCHEMA_IDENTIFIER = "database";
 
@@ -113,6 +114,16 @@ public class SelfServiceConfigurationManager {
 			return identifier;
 		} else {
 			return DEFAULT_DATABASESERVER_CLASS_IDENTIFIER;
+		}
+	}
+	
+	public static String getSoftwareEnvironmentClassIdentifier() {
+		String identifier = configManager.getSelfServiceConfiguration().identifier.softwareenvironment;
+
+		if (identifier != null && !identifier.equals("")) {
+			return identifier;
+		} else {
+			return DEFAULT_SOFTWAREENVIRONMENT_CLASS_IDENTIFIER;
 		}
 	}
 

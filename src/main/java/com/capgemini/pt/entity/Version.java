@@ -2,8 +2,8 @@ package com.capgemini.pt.entity;
 
 import java.io.Serializable;
 
-public class Version implements Serializable{
-	
+public class Version implements Serializable {
+
 	/**
 	 * 
 	 */
@@ -17,6 +17,10 @@ public class Version implements Serializable{
 	public String getName() {
 		// TODO Auto-generated method stub
 		return name;
+	}
+
+	public void setName(String string) {
+		this.name = string;
 	}
 
 }
