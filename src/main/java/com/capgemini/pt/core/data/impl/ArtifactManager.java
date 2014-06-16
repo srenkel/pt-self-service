@@ -6,6 +6,7 @@ package com.capgemini.pt.core.data.impl;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.apache.maven.repository.internal.MavenRepositorySystemUtils;
@@ -36,6 +37,9 @@ import com.capgemini.pt.core.data.IArtifactManager;
 //import com.capgemini.pt.entity.Version;
 
 public class ArtifactManager implements IArtifactManager {
+
+	public static boolean FORCE_REPOSITORY_UPDATE = false;
+	private DefaultRepositorySystemSession session;
 
 	public ArtifactManager() {
 	}
@@ -70,17 +74,24 @@ public class ArtifactManager implements IArtifactManager {
 
 	private DefaultRepositorySystemSession getRepositorySession() {
 
-		DefaultRepositorySystemSession session = MavenRepositorySystemUtils
-				.newSession();
+		if (session == null) {
+			session = MavenRepositorySystemUtils.newSession();
 
-		LocalRepository localRepo = new LocalRepository("target/local-repo");
-		session.setLocalRepositoryManager(getRepositorySystem()
-				.newLocalRepositoryManager(session, localRepo));
+			LocalRepository localRepo = new LocalRepository("target/local-repo");
+			session.setLocalRepositoryManager(getRepositorySystem()
+					.newLocalRepositoryManager(session, localRepo));
+		}
 
 		// uncomment for console logging
 		// session.setTransferListener(new ConsoleTransferListener());
 		// session.setRepositoryListener(new ConsoleRepositoryListener());
-		session.setUpdatePolicy(RepositoryPolicy.UPDATE_POLICY_INTERVAL + ":15");
+		if (FORCE_REPOSITORY_UPDATE) {
+			session.setUpdatePolicy(RepositoryPolicy.UPDATE_POLICY_ALWAYS);
+			FORCE_REPOSITORY_UPDATE = false;
+		} else {
+			session.setUpdatePolicy(RepositoryPolicy.UPDATE_POLICY_INTERVAL
+					+ ":15");
+		}
 		return session;
 	}
 
@@ -111,7 +122,13 @@ public class ArtifactManager implements IArtifactManager {
 
 		VersionRangeResult rangeResult = getVersionRangeResult(artifact);
 		List<Version> versions = rangeResult.getVersions();
-		Collections.sort(versions);
+		Collections.sort(versions, new Comparator<Version>() {
+
+			@Override
+			public int compare(Version o1, Version o2) {
+				return o2.compareTo(o1);
+			}
+		});
 		for (int i = 0; i < versions.size(); i++) {
 			Version vers = versions.get(i);
 			outputVersions.add(new com.capgemini.pt.entity.Version(vers

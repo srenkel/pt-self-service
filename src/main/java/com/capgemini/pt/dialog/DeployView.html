@@ -12,18 +12,21 @@
 						<select id="incrementDropDown" wicket:id="incrementDropDown"></select>
 					</p>
 				</div>
-				<div class="definition box right twothird margin">
+				<div class="definition box right twothird margin"
+					style="display: none;">
 					<p>
 						<label for="definitionDropDown">Definition</label> <br /> <select
-							id="definitionDropDown" wicket:id="definitionDropDown"></select>
-						<input type="submit" value="Load" /> <input type="submit"
-							value="Save" />
+							id="definitionDropDown" wicket:id="definitionDropDown"></select><br />
+						<input wicket:id="loadButton" type="button" value="Load" /> <input
+							type="button" wicket:id="saveButton" value="Save" />
 					</p>
 				</div>
 				<div class="build box left clear third margin">
+
 					<p>
 						<label for="versionDropDown">Build</label> <br /> <select
-							id="versionDropDown" wicket:id="versionDropDown"></select>
+							id="versionDropDown" wicket:id="versionDropDown"></select> <br />
+						<span wicket:id="loadingLabel" class="loading"></span>
 					</p>
 				</div>
 				<div class="environment box left third margin">

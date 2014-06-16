@@ -38,6 +38,7 @@ public abstract class BaseView extends WebPage {
 				"Deployment Manager")));
 
 		FeedbackPanel f = new FeedbackPanel("feedback");
+		f.setOutputMarkupId(true);
 		add(f);
 
 		addBookmarkables();

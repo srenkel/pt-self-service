@@ -47,12 +47,12 @@ public class NodeGroup implements Serializable {
 
 	// bi-directional many-to-many association to NodeGroup
 	@ManyToMany
-	@JoinTable(name = "node_group_edges", joinColumns = { @JoinColumn(name = "from_id") }, inverseJoinColumns = { @JoinColumn(name = "to_id") })
+	@JoinTable(name = "node_group_edges", schema = "dashboard_production", joinColumns = { @JoinColumn(name = "from_id") }, inverseJoinColumns = { @JoinColumn(name = "to_id") })
 	private List<NodeGroup> nodeGroups;
 
 	// bi-directional many-to-many association to NodeClass
 	@ManyToMany
-	@JoinTable(name = "node_group_class_memberships", joinColumns = { @JoinColumn(name = "node_group_id") }, inverseJoinColumns = { @JoinColumn(name = "node_class_id") })
+	@JoinTable(name = "node_group_class_memberships", schema = "dashboard_production", joinColumns = { @JoinColumn(name = "node_group_id") }, inverseJoinColumns = { @JoinColumn(name = "node_class_id") })
 	private List<NodeClass> nodeClasses;
 
 	public NodeGroup() {
@@ -106,7 +106,8 @@ public class NodeGroup implements Serializable {
 	}
 
 	/**
-	 * @param nodeGroups the nodeGroups to set
+	 * @param nodeGroups
+	 *            the nodeGroups to set
 	 */
 	public void setNodeGroups(List<NodeGroup> nodeGroups) {
 		this.nodeGroups = nodeGroups;
@@ -120,12 +121,11 @@ public class NodeGroup implements Serializable {
 	}
 
 	/**
-	 * @param nodeClasses the nodeClasses to set
+	 * @param nodeClasses
+	 *            the nodeClasses to set
 	 */
 	public void setNodeClasses(List<NodeClass> nodeClasses) {
 		this.nodeClasses = nodeClasses;
 	}
-	
-	
 
 }

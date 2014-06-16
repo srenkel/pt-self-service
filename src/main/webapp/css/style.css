@@ -115,6 +115,23 @@ body {
 	top: 10px;
 }
 
+.error {
+	border: 1px solid red;
+}
+
+.ok {
+	border: 1px solid green;
+}
+
+.loading {
+	font-size: 11px;
+	font-style: italic;
+}
+
+.box {
+	text-align: center;
+}
+
 /* SECTIONS */
 .deploy {
 	margin: 0px;

@@ -15,6 +15,8 @@ import org.wicketstuff.rest.resource.gson.GsonRestResource;
 import org.wicketstuff.rest.utils.http.HttpMethod;
 
 import com.capgemini.pt.core.SelfServiceManager;
+import com.capgemini.pt.core.data.impl.ArtifactManager;
+import com.capgemini.pt.core.data.impl.ConfigurationManager;
 import com.capgemini.pt.core.data.impl.PuppetAgentManager;
 import com.capgemini.pt.entity.Application;
 import com.capgemini.pt.entity.ApplicationStatus;
@@ -69,6 +71,12 @@ public class ServiceManager extends GsonRestResource implements IServiceManager 
 	@MethodMapping(value = "/status", httpMethod = HttpMethod.GET)
 	public List<ApplicationStatus> getApplicationStatus() {
 		return manager.getSelfServiceDataManager().getApplicationStatus();
+	}
+
+	@MethodMapping(value = "/force/repo/update", httpMethod = HttpMethod.GET)
+	public boolean forceRepositoryUpdate() {
+		ArtifactManager.FORCE_REPOSITORY_UPDATE = true;
+		return true;
 	}
 
 	@Override
